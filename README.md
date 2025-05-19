@@ -66,15 +66,7 @@ The pipeline generates a CSV report (`module_versions_results.csv`) that looks l
 The code is an example! You'll need to tweak the code to make it work for you.
 If you want to use this pipeline in your own environment, you may need to make the following changes:
 
-1. Terraform Cloud/Enterprise (TFE) Instance:
-   - The pipeline is configured to use a specific TFE instance.
-   - Update the TFE URL in the `Jenkinsfile` to point to your own TFE instance:
-     ```groovy
-     def tfeURL = 'https://your-tfe-instance.example.com'
-     ```
-2. Organization Name:
-   - The pipeline uses a specific TFE organization.
-   - Update the organization name in the `Jenkinsfile` to match your TFE organization:
-     ```groovy
-     def organization = 'your-organization-name'
-     ```
+1. Terraform Cloud/Enterprise (TFE) Instance URL
+2. Organization Name
+3. Workspace Name
+4. Read through the [module preqs](#module-prequisites), the pipeline was written with a specific module structure in mind
