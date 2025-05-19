@@ -23,9 +23,9 @@ This repository contains a Jenkins pipeline and supporting scripts to test a Ter
 - Credentials for GitHub and Terraform Cloud/Enterprise.
 
 ## Module Prequisites:
-- examples/ holds module{} blocks with version specified
-- required_versions and required_providers with constraints in terraform.tf 
-- version.txt exists with current version of module 
+- `examples/` holds `module{}` blocks with version specified
+- `required_versions` and `required_providers with` constraints in `terraform.tf`
+- `version.txt` exists with current version of module 
 
 ## Pipeline Parameters
 
