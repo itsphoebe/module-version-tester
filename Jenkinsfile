@@ -34,6 +34,8 @@ node {
   def ARCHIVIST_URL = ''
   def MODULE_VERSION_NAME = ''
   def CSV_REPORT = 'module_versions_results.csv'
+  def tfeURL = 'https://tfe-migrate-from.phoebe-lee.sbx.hashidemos.io'
+  def organization = 'phoebe-test'
 
   stage('Clean') {
     cleanWs()
@@ -223,13 +225,13 @@ node {
       withCredentials([string(credentialsId: 'TFE-migrate-from-admin-token', variable: 'TFE_API_TOKEN')]) {
         script {
           // Create terraform.tf file containing details to map to an emphemeral workspace to deploy the module
-          sh'''
+          sh"""
             cd examples
             cat <<EOF > terraform.tf
 terraform {
   cloud {
-    hostname = "tfe-migrate-from.phoebe-lee.sbx.hashidemos.io"
-    organization = "phoebe-test"
+    hostname = "${tfeURL.substring(8)}"
+    organization = "${organization}"
 
     workspaces {
       name = "module-version-tester"
@@ -237,7 +239,7 @@ terraform {
   }
 }
 EOF
-          '''
+          """
         }
       }
       // Apply module as described in examples directory
@@ -257,7 +259,7 @@ EOF
           def response = sh(
             script: '''
               curl -sS --write-out "%{http_code}" --request POST \
-                --url https://tfe-migrate-from.phoebe-lee.sbx.hashidemos.io/api/v2/organizations/phoebe-test/registry-modules/ \
+                --url ''' + tfeURL + '''/api/v2/organizations/''' + organization + '''/registry-modules/ \
                 --header "Authorization: Bearer $TFE_API_TOKEN" \
                 --header "Content-Type: application/vnd.api+json" \
                 --data '{
@@ -303,7 +305,7 @@ EOF
               def response = sh(
                 script:'''
                   curl -sS --write-out "%{http_code}" --request POST \
-                    --url https://tfe-migrate-from.phoebe-lee.sbx.hashidemos.io/api/v2/organizations/phoebe-test/registry-modules/private/phoebe-test/${MODULE_NAME}/${PROVIDER}/versions \
+                    --url ''' + tfeURL + '''/api/v2/organizations/''' + organization + '''/registry-modules/private/''' + organization + '''/${MODULE_NAME}/${PROVIDER}/versions \
                     --header "Authorization: Bearer $TFE_API_TOKEN" \
                     --header "Content-Type: application/vnd.api+json" \
                     --data '{
@@ -350,7 +352,7 @@ EOF
               def response = sh(
                 script:'''
                   curl -sS --write-out "%{http_code}" --request GET \
-                    --url https://tfe-migrate-from.phoebe-lee.sbx.hashidemos.io/api/v2/organizations/phoebe-test/registry-modules/private/phoebe-test/${MODULE_NAME}/${PROVIDER}/ \
+                    --url ''' + tfeURL + '''/api/v2/organizations/''' + organization + '''/registry-modules/private/''' + organization + '''/${MODULE_NAME}/${PROVIDER}/ \
                     --header "Authorization: Bearer $TFE_API_TOKEN" \
                     --header "Content-Type: application/vnd.api+json" \
                 ''',
@@ -441,7 +443,7 @@ EOF
                   def response = sh(
                     script:'''
                       curl -sS --write-out "%{http_code}" --request DELETE \
-                        --url https://tfe-migrate-from.phoebe-lee.sbx.hashidemos.io/api/v2/organizations/phoebe-test/registry-modules/private/phoebe-test/${MODULE_NAME}/${PROVIDER}/''' + MODULE_VERSION_NAME + ''' \
+                        --url ''' + tfeURL + '''/api/v2/organizations/''' + organization + '''/registry-modules/private/''' + organization + '''/${MODULE_NAME}/${PROVIDER}/''' + MODULE_VERSION_NAME + ''' \
                         --header "Authorization: Bearer $TFE_API_TOKEN"
                     ''',
                     returnStdout: true

@@ -5,6 +5,8 @@ This repository contains a Jenkins pipeline and supporting scripts to test a Ter
 - For Terraform versions: tests against a minimum version of v1.4.0.
 - For Provider versions: tests against providers released on https://releases.hashicorp.com/ with terraform-provider-xxxx
 
+
+
 ## Files
 
 - **`Jenkinsfile`**: The main Jenkins pipeline script.
@@ -58,3 +60,13 @@ This repository contains a Jenkins pipeline and supporting scripts to test a Ter
 
 The pipeline generates a CSV report (`module_versions_results.csv`) that looks like:
 ![report](assets/report.png)
+
+## Customizing the Pipeline for Your Environment
+
+The code is an example! You'll need to tweak the code to make it work for you.
+If you want to use this pipeline in your own environment, you may need to make the following changes:
+
+1. Terraform Cloud/Enterprise (TFE) Instance URL
+2. Organization Name
+3. Workspace Name
+4. Read through the [module preqs](#module-prequisites), the pipeline was written with a specific module structure in mind
